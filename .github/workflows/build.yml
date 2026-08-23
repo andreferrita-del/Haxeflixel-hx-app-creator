@@ -1,0 +1,39 @@
+name: Build HaxeFlixel Game
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Haxe
+        uses: krdlab/setup-haxe@v1
+        with:
+          haxe-version: 4.3.4
+
+      - name: Install Haxelibs
+        run: |
+          haxelib setup C:/haxelib
+          haxelib install lime
+          haxelib install openfl
+          haxelib install flixel
+          haxelib install sscript
+          haxelib run lime setup
+
+      - name: Compile Project with Lime
+        run: haxelib run lime build windows
+
+      - name: Upload Executable Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: HaxeFlixelRuntime-Windows
+          path: export/windows/bin/
