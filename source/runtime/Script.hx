@@ -12,7 +12,6 @@ import flixel.util.FlxTimer;
 
 class Script extends SScript {
 	public var scriptPath:String;
-	public var active:Bool = true;
 
 	public function new(path:String, ?presetVariables:Map<String, Dynamic>) {
 		super();
