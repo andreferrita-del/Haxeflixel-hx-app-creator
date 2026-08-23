@@ -1,10 +1,8 @@
 package runtime;
 
 import haxe.Json;
-
-#if sys
-import sys.filesystem.File;
-#end
+import sys.FileSystem;
+import sys.io.File;
 
 typedef StateEntry = {
 	var name:String;
@@ -23,18 +21,18 @@ typedef InitialStateConfig = {
 
 class RuntimeConfig {
 	public static function loadData():DataConfig {
-		#if sys
-		var content = File.getContent("assets/src/data.json");
-		return Json.parse(content);
-		#else
+		if (FileSystem.exists("assets/src/data.json")) {
+			var content = File.getContent("assets/src/data.json");
+			return Json.parse(content);
+		}
 		return { states: [] };
-		#end
 	}
 
 	public static function loadInitial():InitialStateConfig {
-		#if sys
-		var content = File.getContent("assets/src/initial-state.json");
-		return Json.parse(content);
-		#end
+		if (FileSystem.exists("assets/src/initial-state.json")) {
+			var content = File.getContent("assets/src/initial-state.json");
+			return Json.parse(content);
+		}
+		return { name: "menu", path: "states/MenuState.hx" };
 	}
 }
