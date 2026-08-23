@@ -2,7 +2,7 @@
   "states": [
     { 
       "name":"main",
-      "path":"main",
+      "path":"main.hx",
       "type":"state"
     }
   ]
