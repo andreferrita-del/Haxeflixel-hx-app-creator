@@ -80,7 +80,25 @@ class ScriptState extends FlxState {
 			script.set("FlxTimer", flixel.util.FlxTimer);
 
 			// Flixel Math & Utilities
-			script.set("FlxColor", flixel.util.FlxColor);
+						// Substituição do Abstract FlxColor por um mapa de constantes (Int)
+			script.set("FlxColor", {
+				TRANSPARENT: 0x00000000,
+				WHITE: 0xFFFFFFFF,
+				BLACK: 0xFF000000,
+				GREEN: 0xFF008000,
+				LIME: 0xFF00FF00,
+				YELLOW: 0xFFFFFF00,
+				ORANGE: 0xFFFFA500,
+				RED: 0xFFFF0000,
+				PURPLE: 0xFF800080,
+				BLUE: 0xFF0000FF,
+				BROWN: 0xFF8B4513,
+				PINK: 0xFFFFC0CB,
+				MAGENTA: 0xFFFF00FF,
+				CYAN: 0xFF00FFFF,
+				GRAY: 0xFF808080
+			});
+
 			script.set("FlxMath", flixel.math.FlxMath);
 			script.set("FlxPoint", flixel.math.FlxPoint);
 			script.set("FlxRect", flixel.math.FlxRect);
