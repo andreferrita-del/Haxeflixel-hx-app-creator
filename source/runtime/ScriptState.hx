@@ -83,8 +83,6 @@ class ScriptState extends FlxState {
 						// Substituição do Abstract Fl
 
 			script.set("FlxMath", flixel.math.FlxMath);
-			script.set("FlxPoint", flixel.math.FlxPoint);
-			script.set("FlxRect", flixel.math.FlxRect);
 			script.set("FlxRandom", flixel.math.FlxRandom);
 			script.set("FlxVelocity", flixel.math.FlxVelocity);
 			script.set("FlxAngle", flixel.math.FlxAngle);
