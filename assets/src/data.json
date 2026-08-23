@@ -1,0 +1,9 @@
+{
+  "states": [
+    { 
+      "name":"main",
+      "path":"main",
+      "type":"state"
+    }
+  ]
+}
