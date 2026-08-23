@@ -7,6 +7,11 @@ import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.display.Sprite;
 
+#if sys
+import sys.filesystem.File;
+import sys.filesystem.FileSystem;
+#end
+
 class RuntimeErrorHandler {
 	public static function init():Void {
 		Lib.current.loaderInfo.uncaughtErrorEvents.addEventListener(UncaughtErrorEvent.UNCAUGHT_ERROR, onUncaughtError);
@@ -14,7 +19,7 @@ class RuntimeErrorHandler {
 
 	private static function onUncaughtError(e:UncaughtErrorEvent):Void {
 		e.preventDefault();
-		showError("Runtime Exception", "Unknown", 0, 0, Std.string(e.error), haxe.CallStack.toString(haxe.CallStack.exceptionStack()));
+		showError("Runtime Exception", "Desconhecido", 0, 0, Std.string(e.error), haxe.CallStack.toString(haxe.CallStack.exceptionStack()));
 	}
 
 	public static function handleScriptError(filePath:String, e:Dynamic, script:Dynamic):Void {
@@ -26,7 +31,7 @@ class RuntimeErrorHandler {
 			line = script.parsingError.line;
 		}
 
-		showError("Script Error", filePath, line, 0, msg, haxe.CallStack.toString(haxe.CallStack.exceptionStack()));
+		showError("Erro de Script", filePath, line, 0, msg, haxe.CallStack.toString(haxe.CallStack.exceptionStack()));
 	}
 
 	public static function showError(type:String, file:String, line:Int, col:Int, msg:String, stack:String):Void {
@@ -45,39 +50,41 @@ class RuntimeErrorHandler {
 		tf.defaultTextFormat = new TextFormat("_sans", 14, 0xFFFFFF);
 
 		var codeSnippet = "";
-		if (sys.filesystem.FileSystem.exists(file) && line > 0) {
-			var lines = sys.filesystem.File.getContent(file).split("\n");
+		#if sys
+		if (FileSystem.exists(file) && line > 0) {
+			var lines = File.getContent(file).split("\n");
 			var start = lines[line - 3] != null ? line - 3 : 0;
 			var end = lines[line + 1] != null ? line + 1 : lines.length - 1;
-			codeSnippet = "\n\nCode snippet around line " + line + ":\n";
+			codeSnippet = "\n\nCódigo ao redor da linha " + line + ":\n";
 			for (i in start...end + 1) {
 				var prefix = (i + 1 == line) ? " > " : "   ";
 				codeSnippet += prefix + (i + 1) + ": " + lines[i] + "\n";
 			}
 		}
+		#end
 
 		tf.text = '┌──────────────────────────────────────────────┐\n' +
 		          '  HaxeFlixel Runtime Error\n' +
 		          '├──────────────────────────────────────────────┤\n' +
-		          '  Type: $type\n' +
-		          '  File: $file\n' +
-		          '  Line: $line | Column: $col\n\n' +
-		          '  Message: $msg\n\n' +
+		          '  Tipo: $type\n' +
+		          '  Arquivo: $file\n' +
+		          '  Linha: $line | Coluna: $col\n\n' +
+		          '  Mensagem: $msg\n\n' +
 		          '  Stack trace:\n$stack' + codeSnippet +
 		          '└──────────────────────────────────────────────┘';
 
 		modal.addChild(tf);
 
-		var btnCopy = createButton("Copy Error", 120, 600, function(_) {
+		var btnCopy = createButton("Copiar Erro", 120, 600, function(_) {
 			openfl.system.System.setClipboard(tf.text);
 		});
 		
-		var btnReload = createButton("Reload", 260, 600, function(_) {
+		var btnReload = createButton("Recarregar", 260, 600, function(_) {
 			Lib.current.stage.removeChild(modal);
 			flixel.FlxG.resetState();
 		});
 
-		var btnClose = createButton("Close", 400, 600, function(_) {
+		var btnClose = createButton("Fechar", 400, 600, function(_) {
 			Lib.current.stage.removeChild(modal);
 		});
 
