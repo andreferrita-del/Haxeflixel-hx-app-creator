@@ -84,7 +84,6 @@ class ScriptState extends FlxState {
 			script.set("FlxMath", flixel.math.FlxMath);
 			script.set("FlxPoint", flixel.math.FlxPoint);
 			script.set("FlxRect", flixel.math.FlxRect);
-			script.set("FlxVector", flixel.math.FlxVector);
 			script.set("FlxRandom", flixel.math.FlxRandom);
 			script.set("FlxVelocity", flixel.math.FlxVelocity);
 			script.set("FlxAngle", flixel.math.FlxAngle);
@@ -98,7 +97,6 @@ class ScriptState extends FlxState {
 			script.set("FlxEmitter", flixel.effects.particles.FlxEmitter);
 			script.set("FlxParticle", flixel.effects.particles.FlxParticle);
 			script.set("FlxBackdrop", flixel.addons.display.FlxBackdrop);
-			script.set("FlxTiledMap", flixel.addons.editors.tiled.FlxTiledMap);
 
 			// OpenFL / Lime Layer
 			script.set("Assets", openfl.utils.Assets);
