@@ -1,6 +1,6 @@
 package runtime;
 
-import hscript.sscript;
+import hscript.SScript;
 import sys.FileSystem;
 import sys.io.File;
 import flixel.FlxG;
