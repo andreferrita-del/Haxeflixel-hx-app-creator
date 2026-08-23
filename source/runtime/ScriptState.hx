@@ -1,11 +1,16 @@
 package runtime;
 
 import flixel.FlxState;
-import SScript;
+import sys.FileSystem;
+import sys.io.File;
 
-#if sys
-import sys.filesystem.File;
-import sys.filesystem.FileSystem;
+// Importação dinâmica com base na versão do SScript instalada
+#if (sscript >= "20.0.0")
+import hscript.SScript;
+#elseif (sscript >= "3.0.0")
+import tea.backend.SScript;
+#else
+import SScript;
 #end
 
 class ScriptState extends FlxState {
@@ -20,7 +25,6 @@ class ScriptState extends FlxState {
 	override public function create():Void {
 		var fullPath = "assets/src/" + scriptPath;
 
-		#if sys
 		if (!FileSystem.exists(fullPath)) {
 			RuntimeErrorHandler.showError(
 				"Arquivo Não Encontrado",
@@ -31,7 +35,6 @@ class ScriptState extends FlxState {
 			);
 			return;
 		}
-		#end
 
 		try {
 			script = new SScript(fullPath);
