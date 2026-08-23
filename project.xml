@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	<app title="HaxeFlixel Dynamic Runtime" file="HaxeFlixelRuntime" main="Main" version="1.0.0" company="Custom" />
+	
+	<window width="1280" height="720" fps="60" background="0x000000" hardware="true" vsync="true" />
+
+	<source path="source" />
+
+	<haxelib name="flixel" />
+	<haxelib name="sscript" />
+
+	<assets path="assets" />
+</project>
