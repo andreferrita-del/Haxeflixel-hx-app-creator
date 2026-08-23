@@ -6,11 +6,8 @@ import openfl.events.MouseEvent;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.display.Sprite;
-
-#if sys
-import sys.filesystem.File;
-import sys.filesystem.FileSystem;
-#end
+import sys.FileSystem;
+import sys.io.File;
 
 class RuntimeErrorHandler {
 	public static function init():Void {
@@ -26,9 +23,10 @@ class RuntimeErrorHandler {
 		var line:Int = 0;
 		var msg:String = Std.string(e);
 		
-		if (script != null && script.parsingError != null) {
-			msg = script.parsingError.message;
-			line = script.parsingError.line;
+		if (script != null && Reflect.hasField(script, "parsingError") && Reflect.field(script, "parsingError") != null) {
+			var err = Reflect.field(script, "parsingError");
+			msg = Std.string(Reflect.field(err, "message"));
+			line = Std.int(Reflect.field(err, "line"));
 		}
 
 		showError("Erro de Script", filePath, line, 0, msg, haxe.CallStack.toString(haxe.CallStack.exceptionStack()));
@@ -50,7 +48,6 @@ class RuntimeErrorHandler {
 		tf.defaultTextFormat = new TextFormat("_sans", 14, 0xFFFFFF);
 
 		var codeSnippet = "";
-		#if sys
 		if (FileSystem.exists(file) && line > 0) {
 			var lines = File.getContent(file).split("\n");
 			var start = lines[line - 3] != null ? line - 3 : 0;
@@ -61,7 +58,6 @@ class RuntimeErrorHandler {
 				codeSnippet += prefix + (i + 1) + ": " + lines[i] + "\n";
 			}
 		}
-		#end
 
 		tf.text = '┌──────────────────────────────────────────────┐\n' +
 		          '  HaxeFlixel Runtime Error\n' +
