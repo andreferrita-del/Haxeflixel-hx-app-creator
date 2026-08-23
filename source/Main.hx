@@ -1,38 +1,26 @@
-package runtime;
+package;
 
-import haxe.Json;
+import flixel.FlxGame;
+import openfl.display.Sprite;
 import sys.FileSystem;
 import sys.io.File;
+import runtime.RuntimeLoader;
+import runtime.RuntimeErrorHandler;
 
-typedef StateEntry = {
-	var name:String;
-	var path:String;
-	var type:String;
-}
+class Main extends Sprite {
+	public function new() {
+		super();
+		
+		RuntimeErrorHandler.init();
 
-typedef DataConfig = {
-	var states:Array<StateEntry>;
-}
-
-typedef InitialStateConfig = {
-	var name:String;
-	var path:String;
-}
-
-class RuntimeConfig {
-	public static function loadData():DataConfig {
-		if (FileSystem.exists("assets/src/data.json")) {
-			var content = File.getContent("assets/src/data.json");
-			return Json.parse(content);
+		var appName:String = "HaxeFlixel App";
+		
+		if (FileSystem.exists("assets/src/app-name.txt")) {
+			appName = StringTools.trim(File.getContent("assets/src/app-name.txt"));
 		}
-		return { states: [] };
-	}
+		
+		openfl.Lib.current.stage.window.title = appName;
 
-	public static function loadInitial():InitialStateConfig {
-		if (FileSystem.exists("assets/src/initial-state.json")) {
-			var content = File.getContent("assets/src/initial-state.json");
-			return Json.parse(content);
-		}
-		return { name: "menu", path: "states/MenuState.hx" };
+		addChild(new FlxGame(1280, 720, RuntimeLoader.getInitialState(), 60, 60, true));
 	}
 }
