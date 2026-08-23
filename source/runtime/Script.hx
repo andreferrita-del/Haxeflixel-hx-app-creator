@@ -59,3 +59,4 @@ class Script extends SScript {
 		}
 	}
 
+}
