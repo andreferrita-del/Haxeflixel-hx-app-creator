@@ -1,0 +1,1 @@
+my App Name in assets/src/app-name.txt :)
