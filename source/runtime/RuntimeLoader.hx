@@ -12,11 +12,11 @@ class RuntimeLoader {
 		var config = RuntimeConfig.loadData();
 		for (s in config.states) {
 			if (s.name == stateName) {
-				FlxG.switchState(new ScriptState(s.path));
+				FlxG.switchState(() -> new ScriptState(s.path));
 				return;
 			}
 		}
-		RuntimeErrorHandler.showError("State Missing", "assets/src/data.json", 0, 0, "State '" + stateName + "' is not registered in data.json.", "");
+		RuntimeErrorHandler.showError("State Inexistente", "assets/src/data.json", 0, 0, "O state '" + stateName + "' não foi registrado no data.json.", "");
 	}
 }
 
@@ -25,9 +25,9 @@ class DynamicStateWrapper extends FlxState {
 		super.create();
 		try {
 			var initial = RuntimeConfig.loadInitial();
-			FlxG.switchState(new ScriptState(initial.path));
+			FlxG.switchState(() -> new ScriptState(initial.path));
 		} catch (e:Dynamic) {
-			RuntimeErrorHandler.showError("Initialization Error", "assets/src/initial-state.json", 0, 0, Std.string(e), "");
+			RuntimeErrorHandler.showError("Erro de Inicialização", "assets/src/initial-state.json", 0, 0, Std.string(e), "");
 		}
 	}
 }
