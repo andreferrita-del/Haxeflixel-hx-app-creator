@@ -2,30 +2,35 @@ package runtime;
 
 import flixel.FlxState;
 import flixel.FlxG;
+import sys.FileSystem;
 
 class ScriptedState extends FlxState {
-	public var scriptName:String;
+	public var scriptPath:String;
 	public var scripts:ScriptGroup;
 
-	public function new(scriptName:String) {
+	public function new(scriptPath:String) {
 		super();
-		this.scriptName = scriptName;
+		this.scriptPath = scriptPath;
 		this.scripts = new ScriptGroup();
 	}
 
 	override public function create():Void {
 		super.create();
 
-		var path:String = "assets/src/states/" + scriptName + ".hx";
+		var fullPath:String = "assets/src/" + scriptPath;
 		
+		if (!FileSystem.exists(fullPath)) {
+			fullPath = "./assets/src/" + scriptPath;
+		}
+
 		var presetVars:Map<String, Dynamic> = [
 			"state" => this,
-			"add" => add,
-			"remove" => remove,
-			"insert" => insert
+			"add" => function(basic:flixel.FlxBasic) return add(basic),
+			"remove" => function(basic:flixel.FlxBasic) return remove(basic),
+			"insert" => function(position:Int, basic:flixel.FlxBasic) return insert(position, basic)
 		];
 
-		scripts.addScript(path, presetVars);
+		scripts.addScript(fullPath, presetVars);
 		
 		scripts.call("create", []);
 		scripts.call("postCreate", []);
