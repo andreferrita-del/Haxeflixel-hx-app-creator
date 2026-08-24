@@ -10,6 +10,8 @@
 	<haxelib name="flixel-addons" />
 	<haxelib name="flixel-ui" />
 	<haxelib name="hscript" />
+	
+	<define name="CUSTOM_CLASSES" />
 
 	<assets path="assets" />
 
