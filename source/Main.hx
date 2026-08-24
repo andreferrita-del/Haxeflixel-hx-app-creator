@@ -14,7 +14,7 @@ class Main extends Sprite {
 		RuntimeErrorHandler.init();
 		ensureRuntimeEnvironment();
 
-		var appName:String = "HaxeFlixel Codename Engine";
+		var appName:String = "My game/app name";
 		if (FileSystem.exists("assets/src/app-name.txt")) {
 			appName = StringTools.trim(File.getContent("assets/src/app-name.txt"));
 		}
@@ -27,14 +27,14 @@ class Main extends Sprite {
 
 	private function ensureRuntimeEnvironment():Void {
 		if (!FileSystem.exists("assets/src")) FileSystem.createDirectory("assets/src");
-		if (!FileSystem.exists("assets/src/states")) FileSystem.createDirectory("assets/src/states");
+		//if (!FileSystem.exists("assets/src/states")) FileSystem.createDirectory("assets/src/states");
 
 		/*if (!FileSystem.exists("assets/src/app-name.txt")) {
 			File.saveContent("assets/src/app-name.txt", "Meu Jogo");
 		}*/
 
 		// Cria o script padrão do MenuState com Package e Imports se não existir
-		if (!FileSystem.exists("assets/src/states/MenuState.hx")) {
+		/*if (!FileSystem.exists("assets/src/states/MenuState.hx")) {
 			var menuScript = 
 'package states;
 
@@ -68,6 +68,6 @@ function onDestroy() {
 	// Cleanup extra
 }';
 			File.saveContent("assets/src/states/MenuState.hx", menuScript);
-		}
+		}*/
 	}
 }
