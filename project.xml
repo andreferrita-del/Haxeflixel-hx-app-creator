@@ -9,7 +9,7 @@
 	<haxelib name="flixel" />
 	<haxelib name="flixel-addons" optional="true" />
 	<haxelib name="flixel-ui" optional="true" />
-	<haxelib name="sscript" />
+	<haxelib name="hscript" />
 
 	<assets path="assets" />
 
