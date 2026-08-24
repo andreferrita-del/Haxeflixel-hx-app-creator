@@ -27,9 +27,8 @@
     },
     {
       "name": "hscript",
-      "type": "git",
-      "url": "https://github.com/CodenameCrew/hscript-improved",
-      "ref": "main"
+      "type": "haxelib",
+      "version": "2.7.0"
     }
   ]
 }
