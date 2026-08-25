@@ -2,6 +2,7 @@ package runtime;
 
 import flixel.FlxState;
 import flixel.FlxG;
+import flixel.text.FlxText;
 import sys.FileSystem;
 
 class ScriptedState extends FlxState {
@@ -11,16 +12,30 @@ class ScriptedState extends FlxState {
 	public function new(scriptPath:String) {
 		super();
 		this.scriptPath = scriptPath;
+		
+		// Trava de segurança para garantir o .hx no final do caminho
+		if (!StringTools.endsWith(this.scriptPath, ".hx")) {
+			this.scriptPath += ".hx";
+		}
+
 		this.scripts = new ScriptGroup();
 	}
 
 	override public function create():Void {
 		super.create();
 
-		var fullPath:String = "assets/src/" + scriptPath + ".hx";
-		
+		var fullPath:String = "assets/src/" + scriptPath;
 		if (!FileSystem.exists(fullPath)) {
-			fullPath = "./assets/src/" + scriptPath + ".hx";
+			fullPath = "./assets/src/" + scriptPath;
+		}
+
+		if (!FileSystem.exists(fullPath)) {
+			var errorText = new FlxText(0, FlxG.height / 2 - 20, FlxG.width, "Erro: " + scriptPath + " não foi encontrado!", 24);
+			errorText.alignment = "center";
+			errorText.color = 0xFFFF0000;
+			add(errorText);
+			FlxG.log.error("Arquivo de script não encontrado: " + fullPath);
+			return;
 		}
 
 		var presetVars:Map<String, Dynamic> = [
