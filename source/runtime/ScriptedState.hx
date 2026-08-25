@@ -17,10 +17,10 @@ class ScriptedState extends FlxState {
 	override public function create():Void {
 		super.create();
 
-		var fullPath:String = "assets/src/" + scriptPath;
+		var fullPath:String = "assets/src/" + scriptPath + ".hx";
 		
 		if (!FileSystem.exists(fullPath)) {
-			fullPath = "./assets/src/" + scriptPath;
+			fullPath = "./assets/src/" + scriptPath + ".hx";
 		}
 
 		var presetVars:Map<String, Dynamic> = [
