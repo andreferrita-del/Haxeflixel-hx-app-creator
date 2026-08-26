@@ -3,6 +3,7 @@ package runtime;
 import sys.FileSystem;
 import sys.io.File;
 import haxe.Json;
+import haxe.io.Path;
 import flixel.FlxState;
 
 typedef StateData = {
@@ -19,9 +20,11 @@ class RuntimeLoader {
 	public static function getInitialState():Dynamic {
 		var statePath:String = "states/MenuState.hx";
 
-		var dataPath:String = "assets/src/data.json";
+		var exeDir:String = Path.directory(Sys.programPath());
+		var dataPath:String = Path.join([exeDir, "assets/src/data.json"]);
+
 		if (!FileSystem.exists(dataPath)) {
-			dataPath = "./assets/src/data.json";
+			dataPath = "assets/src/data.json";
 		}
 
 		if (FileSystem.exists(dataPath)) {
@@ -40,15 +43,13 @@ class RuntimeLoader {
 
 					if (targetState.path != null && targetState.path != "") {
 						statePath = targetState.path;
-						
-						// Auto-completa o .hx se a string no JSON vier sem a extensão
 						if (!StringTools.endsWith(statePath, ".hx")) {
 							statePath += ".hx";
 						}
 					}
 				}
 			} catch (e:Dynamic) {
-				trace("Erro ao processar data.json: " + e);
+				trace("Erro ao ler data.json: " + e);
 			}
 		}
 
