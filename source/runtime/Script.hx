@@ -32,7 +32,7 @@ import flixel.util.FlxColor;
 import flixel.util.FlxSave;
 
 // Audio & Groups
-import flixel.system.FlxSound;
+import flixel.sound.FlxSound;
 import flixel.group.FlxGroup;
 import flixel.group.FlxSpriteGroup;
 
@@ -86,8 +86,6 @@ class Script {
 
 		// Math & Geometrics
 		set("FlxMath", FlxMath);
-		set("FlxPoint", FlxPoint);
-		set("FlxRect", FlxRect);
 		set("FlxVelocity", FlxVelocity);
 		set("FlxAngle", FlxAngle);
 
