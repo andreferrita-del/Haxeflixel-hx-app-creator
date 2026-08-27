@@ -4,6 +4,7 @@ import flixel.FlxState;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import sys.FileSystem;
+import runtime.RuntimeConfig;
 
 class ScriptedState extends FlxState {
 	public var scriptPath:String;
