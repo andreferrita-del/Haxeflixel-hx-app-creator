@@ -4,8 +4,7 @@ import flixel.FlxGame;
 import openfl.display.Sprite;
 import sys.FileSystem;
 import sys.io.File;
-import runtime.ScriptedState;
-import runtime.RuntimeErrorHandler;
+import runtime.*;
 
 class Main extends Sprite {
 	public function new() {
@@ -22,7 +21,7 @@ class Main extends Sprite {
 		openfl.Lib.current.stage.window.title = appName;
 
 		// Inicializa a engine carregando o ScriptedState "MenuState"
-		addChild(new FlxGame(1280, 720, function() return new ScriptedState("MenuState"), 60, 60, true));
+		addChild(new FlxGame(1280, 720, function() return new ScriptedState(), 60, 60, true));
 	}
 
 	private function ensureRuntimeEnvironment():Void {
