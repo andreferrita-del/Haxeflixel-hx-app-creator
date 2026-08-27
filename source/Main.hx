@@ -23,7 +23,7 @@ class Main extends Sprite {
 		/*
         * a path of script
 		*/
-		addChild(new FlxGame(1280, 720, function() return new ScriptedState(Script.scriptPath), 60, 60, true));
+		addChild(new FlxGame(1280, 720, function() return new ScriptedState(), 60, 60, true));
 	}
 
 	private function ensureRuntimeEnvironment():Void {
