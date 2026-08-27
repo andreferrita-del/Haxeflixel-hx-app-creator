@@ -20,8 +20,10 @@ class Main extends Sprite {
 		
 		openfl.Lib.current.stage.window.title = appName;
 
-		// Inicializa a engine carregando o ScriptedState "MenuState"
-		addChild(new FlxGame(1280, 720, function() return new ScriptedState(), 60, 60, true));
+		/*
+        * a path of script
+		*/
+		addChild(new FlxGame(1280, 720, function() return new ScriptedState(scriptPath), 60, 60, true));
 	}
 
 	private function ensureRuntimeEnvironment():Void {
