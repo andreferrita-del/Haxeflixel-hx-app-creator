@@ -5,6 +5,7 @@ import flixel.FlxG;
 import flixel.text.FlxText;
 import sys.FileSystem;
 import runtime.RuntimeConfig;
+import haxe.io.Path;
 
 class ScriptedState extends FlxState {
 	public var scriptPath:String;
@@ -15,11 +16,10 @@ class ScriptedState extends FlxState {
 	public function new(?scriptPath:String) {
 		super();
 		
-		// Carrega as configurações via JSON
 		this.dataConfig = RuntimeConfig.loadData();
 		this.initialConfig = RuntimeConfig.loadInitial();
 
-		// Usa o caminho passado ou busca o caminho padrão do JSON
+		// Usa o caminho passado ou busca o padrão do JSON
 		this.scriptPath = (scriptPath != null) ? scriptPath : this.initialConfig.path;
 		this.scripts = new ScriptGroup();
 	}
@@ -27,7 +27,10 @@ class ScriptedState extends FlxState {
 	override public function create():Void {
 		super.create();
 
-		if (!FileSystem.exists(scriptPath)) {
+		// Tenta encontrar o arquivo usando a função de resolução
+		var resolvedPath = resolvePath(scriptPath);
+
+		if (resolvedPath == null || !FileSystem.exists(resolvedPath)) {
 			var errorText = new FlxText(0, FlxG.height / 2 - 20, FlxG.width, "Erro: Arquivo não encontrado!\n" + scriptPath, 20);
 			errorText.alignment = "center";
 			errorText.color = 0xFFFF0000;
@@ -43,7 +46,7 @@ class ScriptedState extends FlxState {
 			"insert" => function(position:Int, basic:flixel.FlxBasic) return insert(position, basic)
 		];
 
-		scripts.addScript(scriptPath, presetVars);
+		scripts.addScript(resolvedPath, presetVars);
 		
 		scripts.call("create", []);
 		scripts.call("postCreate", []);
@@ -59,5 +62,28 @@ class ScriptedState extends FlxState {
 		scripts.call("onDestroy", []);
 		scripts.destroy();
 		super.destroy();
+	}
+
+	// Localizador de arquivos inteligente
+	private function resolvePath(relativePath:String):String {
+		var p = relativePath;
+		
+		// Garante que a extensão .hx exista
+		if (!StringTools.endsWith(p, ".hx")) p += ".hx";
+
+		var exeDir:String = Path.directory(Sys.programPath());
+
+		// 1. Tenta achar na build compilada (perto do .exe)
+		var path1:String = Path.join([exeDir, "assets/src", p]);
+		if (FileSystem.exists(path1)) return path1;
+
+		// 2. Tenta achar no modo de teste do Haxe (Lime/OpenFL)
+		var path2:String = Path.join(["assets/src", p]);
+		if (FileSystem.exists(path2)) return path2;
+
+		// 3. Tenta o caminho direto
+		if (FileSystem.exists(p)) return p;
+
+		return null;
 	}
 }
