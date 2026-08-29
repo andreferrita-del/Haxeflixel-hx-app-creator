@@ -20,34 +20,34 @@ class Main extends Sprite {
 		
 		openfl.Lib.current.stage.window.title = appName;
 
-		/*
-        * a path of script
-		*/
-		addChild(new FlxGame(1280, 720, function() return new ScriptedState(), 60, 60, true));
+		// Inicia apontando para o script inicial Main.hx localizado dentro de assets/src/
+		addChild(new FlxGame(1280, 720, function() return new ScriptedState("Main"), 60, 60, true));
 	}
 
 	private function ensureRuntimeEnvironment():Void {
-		if (!FileSystem.exists("assets/src")) FileSystem.createDirectory("assets/src");
-		//if (!FileSystem.exists("assets/src/states")) FileSystem.createDirectory("assets/src/states");
+		if (!FileSystem.exists("assets/src")) {
+			FileSystem.createDirectory("assets/src");
+		}
 
-		/*if (!FileSystem.exists("assets/src/app-name.txt")) {
+		if (!FileSystem.exists("assets/src/app-name.txt")) {
 			File.saveContent("assets/src/app-name.txt", "Meu Jogo");
-		}*/
+		}
 
-		// Cria o script padrão do MenuState com Package e Imports se não existir
-		/*if (!FileSystem.exists("assets/src/states/MenuState.hx")) {
-			var menuScript = 
-'package states;
+		// Cria o script principal de teste caso não exista
+		if (!FileSystem.exists("assets/src/Main.hx")) {
+			var mainScript = 
+'package;
 
 import flixel.FlxSprite;
 import flixel.text.FlxText;
+import flixel.util.FlxColor;
 import flixel.FlxG;
 
 var logo:FlxSprite;
 var titleText:FlxText;
 
 function create() {
-	titleText = new FlxText(0, 150, FlxG.width, "Codename Engine Runtime", 36);
+	titleText = new FlxText(0, 150, FlxG.width, "Runtime Engine Loaded!", 36);
 	titleText.alignment = "center";
 	titleText.color = FlxColor.CYAN;
 	add(titleText);
@@ -58,7 +58,9 @@ function create() {
 }
 
 function update(elapsed:Float) {
-	logo.angle += 150 * elapsed;
+	if (logo != null) {
+		logo.angle += 150 * elapsed;
+	}
 
 	if (FlxG.keys.justPressed.SPACE) {
 		FlxG.camera.flash(FlxColor.WHITE, 0.4);
@@ -66,9 +68,9 @@ function update(elapsed:Float) {
 }
 
 function onDestroy() {
-	// Cleanup extra
+	// Cleanup
 }';
-			File.saveContent("assets/src/states/MenuState.hx", menuScript);
-		}*/
+			File.saveContent("assets/src/Main.hx", mainScript);
+		}
 	}
 }
