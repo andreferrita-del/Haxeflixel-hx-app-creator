@@ -4,30 +4,21 @@ import flixel.FlxState;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import sys.FileSystem;
-import runtime.RuntimeConfig;
 import haxe.io.Path;
 
 class ScriptedState extends FlxState {
 	public var scriptPath:String;
 	public var scripts:ScriptGroup;
-	public var dataConfig:DataConfig;
-	public var initialConfig:InitialStateConfig;
 
-	public function new(?scriptPath:String) {
+	public function new(scriptPath:String) {
 		super();
-		
-		this.dataConfig = RuntimeConfig.loadData();
-		this.initialConfig = RuntimeConfig.loadInitial();
-
-		// Usa o caminho passado ou busca o padrão do JSON
-		this.scriptPath = (scriptPath != null) ? scriptPath : this.initialConfig.path;
+		this.scriptPath = scriptPath;
 		this.scripts = new ScriptGroup();
 	}
 
 	override public function create():Void {
 		super.create();
 
-		// Tenta encontrar o arquivo usando a função de resolução
 		var resolvedPath = resolvePath(scriptPath);
 
 		if (resolvedPath == null || !FileSystem.exists(resolvedPath)) {
@@ -64,24 +55,22 @@ class ScriptedState extends FlxState {
 		super.destroy();
 	}
 
-	// Localizador de arquivos inteligente
 	private function resolvePath(relativePath:String):String {
 		var p = relativePath;
 		
-		// Garante que a extensão .hx exista
 		if (!StringTools.endsWith(p, ".hx")) p += ".hx";
 
 		var exeDir:String = Path.directory(Sys.programPath());
 
-		// 1. Tenta achar na build compilada (perto do .exe)
+		// 1. Procura relativo ao .exe
 		var path1:String = Path.join([exeDir, "assets/src", p]);
 		if (FileSystem.exists(path1)) return path1;
 
-		// 2. Tenta achar no modo de teste do Haxe (Lime/OpenFL)
+		// 2. Procura relativo ao diretório atual (modo dev / debug)
 		var path2:String = Path.join(["assets/src", p]);
 		if (FileSystem.exists(path2)) return path2;
 
-		// 3. Tenta o caminho direto
+		// 3. Tenta o caminho direto informado
 		if (FileSystem.exists(p)) return p;
 
 		return null;
