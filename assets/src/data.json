@@ -1,9 +1,0 @@
-{
-  "states": [
-    { 
-      "name":"main",
-      "path":"main.hx",
-      "type":"state"
-    }
-  ]
-}
