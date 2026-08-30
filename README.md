@@ -13,5 +13,5 @@ A tool built with **HaxeFlixel** designed to streamline application creation and
 
 ## 📸 Preview
 
-*Add a screenshot or a quick demo GIF here to showcase your tool in action.*
+(not ready yet)...
 
