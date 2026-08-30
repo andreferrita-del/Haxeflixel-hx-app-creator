@@ -4,35 +4,29 @@ import hscript.Parser;
 import sys.FileSystem;
 import sys.io.File;
 
+#if macro
+import haxe.macro.Context;
+import haxe.macro.Expr;
+#end
+
 class ScriptGroup {
 	public var scripts:Array<Script> = [];
 	public var parser:Parser;
 
 	public static var importsMap:Map<String, Dynamic> = new Map<String, Dynamic>();
 
-	// Mapeia automaticamente todas as classes e bibliotecas compiladas no projeto
+	// Mapeia as classes essenciais e utilitários compilados no projeto
 	static function __init__() {
 		#if !macro
-		var classes = Type.allClasses();
-		for (c in classes) {
-			var className = Type.getClassName(c);
-			if (className != null) {
-				var parts = className.split(".");
-				var simpleName = parts[parts.length - 1];
-
-				if (!importsMap.exists(simpleName)) {
-					importsMap.set(simpleName, c);
-				}
-			}
-		}
-
-		// Garante as rotinas nativas core do Haxe
+		// Registra explicitamente os módulos padrão do Haxe e bibliotecas essenciais
 		importsMap.set("Std", Std);
 		importsMap.set("Math", Math);
 		importsMap.set("StringTools", StringTools);
 		importsMap.set("FileSystem", sys.FileSystem);
 		importsMap.set("File", sys.io.File);
 		importsMap.set("Sys", Sys);
+		importsMap.set("Type", Type);
+		importsMap.set("Reflect", Reflect);
 		#end
 	}
 
@@ -93,11 +87,12 @@ class ScriptGroup {
 	}
 
 	public function call(funcName:String, ?args:Array<Dynamic>):Void {
-		if (args == null) args = [];
+		var params:Array<Dynamic> = (args == null) ? [] : args;
 
 		for (script in scripts) {
 			if (script != null && script.active) {
-				script.callFunction(funcName, args);
+				// Chama a função passando a lista de argumentos sem excesso de parâmetros
+				script.callFunction(funcName, params);
 			}
 		}
 	}
