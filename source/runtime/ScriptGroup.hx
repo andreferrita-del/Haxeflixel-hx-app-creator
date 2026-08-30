@@ -24,7 +24,8 @@ class ScriptGroup {
 		#if !macro
 		// Injeta as classes mapeadas pela Macro direto na inicialização
 		var macroClasses:Map<String, Dynamic> = initMacroImports();
-		for (key => val in macroClasses) {
+		for (key in macroClasses.keys()) {
+			var val = macroClasses.get(key);
 			if (val != null && !importsMap.exists(key)) {
 				importsMap.set(key, val);
 			}
@@ -149,9 +150,9 @@ class ScriptGroup {
 		}
 
 		// Adiciona todas as classes do mapa de imports ao escopo local do script
-		for (key => val in importsMap) {
+		for (key in importsMap.keys()) {
 			if (!presetVariables.exists(key)) {
-				presetVariables.set(key, val);
+				presetVariables.set(key, importsMap.get(key));
 			}
 		}
 
